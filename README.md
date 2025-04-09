@@ -158,7 +158,7 @@ python morph_cloud.py ssh --instance-id your_instance_id
 # When done, stop the instance
 python morph_cloud.py stop-instance --instance-id your_instance_id
 
-#More facts:
+## More facts:
 #resource allocations (vCPUs, memory, disk size) cannot be increased after a snapshot is created in Morph.so. Snapshots are immutable templates #with fixed resource configurations.
 #Here's how resource allocation works with Morph.so snapshots:
 #Snapshots Have Fixed Resources:
@@ -172,7 +172,7 @@ python morph_cloud.py stop-instance --instance-id your_instance_id
 
 
 ```
-Workflow Example:
+## Workflow Example:
 ```
 # Create new snapshot with higher resources
 new_snapshot = client.snapshots.create(
@@ -193,4 +193,21 @@ with new_instance.ssh() as ssh:
 # Create final snapshot with your configuration
 final_snapshot = new_instance.snapshot()
 ```
+## How to Access Python and Conda inside the docker env
+## Enter the Docker container
+When you run docker-compose build, it creates a Docker container with Python and Conda installed inside that container, but these tools aren't automatically installed on the host VM itself.
+Think of Docker as a separate, isolated environment:
+The Dockerfile we created installs Python and Conda inside the container
+The host VM (where you're running commands as root) doesn't automatically get these tools
+```
+# First, find your container ID
+docker ps
 
+# Then enter the container
+docker exec -it CONTAINER_ID bash
+
+# Now you can use Python and Conda inside the container
+python --version
+conda --version
+
+```
