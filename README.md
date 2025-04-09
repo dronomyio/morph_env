@@ -172,6 +172,7 @@ python morph_cloud.py stop-instance --instance-id your_instance_id
 
 
 ```
+```
 # Create new snapshot with higher resources
 new_snapshot = client.snapshots.create(
     image_id="morphvm-minimal",  # Or use a base image
@@ -190,4 +191,5 @@ with new_instance.ssh() as ssh:
 
 # Create final snapshot with your configuration
 final_snapshot = new_instance.snapshot()
+```
 
