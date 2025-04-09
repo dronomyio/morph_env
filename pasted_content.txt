@@ -1,0 +1,14 @@
+docker-compose run morph-cloud-app create
+WARN[0000] /Users/macmachine/tools/drone_project_idea/Blogs/morph/Morph_HowTo/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+WARN[0000] Found orphan containers ([morph_howto-morph-cloud-app-run-419199550a33 morph_howto-morph-cloud-app-run-2c6b619cfb95 morph_howto-morph-cloud-app-run-d73c42677a01 morph_howto-morph-cloud-app-run-4f58eb781aea]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
+Tue Apr  8 18:04:13 UTC 2025: Starting Morph Cloud application with operation: create
+Creating a new snapshot with VCPUS=4, MEMORY=8192, DISK_SIZE=100000...
+Traceback (most recent call last):
+  File "/app/create_snapshot.py", line 34, in <module>
+    snapshot = create_snapshot(
+  File "/app/create_snapshot.py", line 19, in create_snapshot
+    client = MorphCloudClient()
+  File "/usr/local/lib/python3.10/site-packages/morphcloud/api.py", line 104, in __init__
+    raise ValueError(
+ValueError: API key must be provided or set in MORPH_API_KEY environment variable
+Tue Apr  8 18:04:13 UTC 2025: Operation create completed

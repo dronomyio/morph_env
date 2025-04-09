@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Main application service
+  morph-cloud-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # Uncomment and set your API key if required
+      # - MORPH_API_KEY=${MORPH_API_KEY:-your_api_key_here}
+      # Set this when using get/delete/create-instance operations
+      - SNAPSHOT_ID=${SNAPSHOT_ID:-}
+      # Set this when using SSH operation
+      - INSTANCE_ID=${INSTANCE_ID:-}
+      # Set this when creating a named instance
+      - INSTANCE_NAME=${INSTANCE_NAME:-}
+      # Resource specifications for create operation
+      - VCPUS=${VCPUS:-2}
+      - MEMORY=${MEMORY:-4096}
+      - DISK_SIZE=${DISK_SIZE:-50000}
+      - DIGEST=${DIGEST:-}
+    volumes:
+      # Mount local directory to persist data and logs
+      - ./data:/app/data
+      # Mount SSH keys for SSH access to instances
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+    command: ${OPERATION:-all}  # Default command runs the comprehensive manager example
+    # Possible commands: create, list, get, delete, create-instance, ssh, all, help
+    restart: unless-stopped
+    networks:
+      - morph-network
+    healthcheck:
+      test: ["CMD", "test", "-f", "/app/data/app.log"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # Enable interactive mode for SSH
+    stdin_open: true
+    tty: true
+
+  # Optional: Add a service for monitoring
+  morph-monitor:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - morph-cloud-app
+    networks:
+      - morph-network
+    profiles:
+      - monitoring
+
+networks:
+  morph-network:
+    driver: bridge
+
+# Define named volumes for data persistence
+volumes:
+  morph-data:
+    driver: local
+
+# Example .env file variables that can be used:
+# MORPH_API_KEY=your_api_key
+# SNAPSHOT_ID=your_snapshot_id
+# INSTANCE_ID=your_instance_id
+# INSTANCE_NAME=your_instance_name
+# OPERATION=create|list|get|delete|create-instance|ssh|all|help
+# VCPUS=2
+# MEMORY=4096
+# DISK_SIZE=50000
+# DIGEST=your_digest
