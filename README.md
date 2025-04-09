@@ -172,6 +172,7 @@ python morph_cloud.py stop-instance --instance-id your_instance_id
 
 
 ```
+Workflow Example:
 ```
 # Create new snapshot with higher resources
 new_snapshot = client.snapshots.create(
